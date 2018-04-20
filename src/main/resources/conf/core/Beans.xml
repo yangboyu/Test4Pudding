@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--<context:annotation-config/>-->
+    <!--<context:component-scan base-package="family"></context:component-scan>-->
+
+    <bean id="template" abstract="true" >
+        <property name="message" value="Hello World!"/>
+        <property name="welcome" value="She is my pudding!"/>
+    </bean>
+
+
+    <bean id="helloWorld" class="family.entity.HelloWorld" parent="template"
+          init-method="init" destroy-method="destroy">
+    </bean>
+
+    <bean id="textEditor" class="family.entity.TextEditor" scope="prototype">
+        <property name="spellChecker" ref="spellChecker">
+        </property>
+    </bean>
+    <bean id="spellChecker" class="family.entity.SpellChecker" scope="prototype"/>
+
+    <!--<bean id="student" class="family.entity.Student">-->
+    <!--</bean>-->
+
+    <!--<bean id="age3" class="java.lang.Integer">-->
+        <!--<constructor-arg value="3"></constructor-arg>-->
+    <!--</bean>-->
+    <!--<bean id="age2" class="java.lang.Integer">-->
+        <!--<constructor-arg value="2"></constructor-arg>-->
+    <!--</bean>-->
+    <!--<bean id="name" class="java.lang.String">-->
+        <!--<constructor-arg value="ada"></constructor-arg>-->
+    <!--</bean>-->
+
+
+    <!--<bean class="family.di.InitHelloWorld" />-->
+
+</beans>

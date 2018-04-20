@@ -11,13 +11,5 @@ public class Test {
         innerClass.test4InnerMethod();
 
     }
-
-    private String fun4() {
-        try {
-            return "aaa";
-        } finally {
-            System.out.println("----");
-        }
-    }
 }
 

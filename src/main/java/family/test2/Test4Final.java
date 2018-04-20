@@ -14,10 +14,6 @@ public final class Test4Final {
         test4Final.test();
     }
 
-    public static void test2() {
-
-    }
-
     public void test() {
         Test4InnerClass test4InnerClass = new Test4InnerClass();
         test4InnerClass.test4InnerMethod();

@@ -26,9 +26,9 @@ public class UserClassLoader2 extends ClassLoader {
         File file = new File(mLibPath, fileName);
 
         try {
-            FileInputStream is = new FileInputStream(file);
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            FileInputStream is = new FileInputStream(file);
             int len = 0;
             try {
                 while ((len = is.read()) != -1) {

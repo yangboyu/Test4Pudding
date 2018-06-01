@@ -25,37 +25,6 @@ public class Test {
 //        printClassDefinition(bp.getClass());
     }
 
-    private static String getModifier(int modifier) {
-        String result = "";
-        switch (modifier) {
-            case Modifier.PRIVATE:
-                result = "private";
-            case Modifier.PUBLIC:
-                result = "public";
-            case Modifier.PROTECTED:
-                result = "protected";
-            case Modifier.ABSTRACT:
-                result = "abstract";
-            case Modifier.FINAL:
-                result = "final";
-            case Modifier.NATIVE:
-                result = "native";
-            case Modifier.STATIC:
-                result = "static";
-            case Modifier.SYNCHRONIZED:
-                result = "synchronized";
-            case Modifier.STRICT:
-                result = "strict";
-            case Modifier.TRANSIENT:
-                result = "transient";
-            case Modifier.VOLATILE:
-                result = "volatile";
-            case Modifier.INTERFACE:
-                result = "interface";
-        }
-        return result;
-    }
-
     private static void printClassDefinition(Class clz) {
         String clzModifier = getModifier(clz.getModifiers());
         if (clzModifier != null && !clzModifier.equals("")) {
@@ -121,5 +90,36 @@ public class Test {
             System.out.println("    " + methodPrototype);
         }
         System.out.println("}");
+    }
+
+    private static String getModifier(int modifier) {
+        String result = "";
+        switch (modifier) {
+            case Modifier.PRIVATE:
+                result = "private";
+            case Modifier.PUBLIC:
+                result = "public";
+            case Modifier.PROTECTED:
+                result = "protected";
+            case Modifier.ABSTRACT:
+                result = "abstract";
+            case Modifier.FINAL:
+                result = "final";
+            case Modifier.NATIVE:
+                result = "native";
+            case Modifier.STATIC:
+                result = "static";
+            case Modifier.SYNCHRONIZED:
+                result = "synchronized";
+            case Modifier.STRICT:
+                result = "strict";
+            case Modifier.TRANSIENT:
+                result = "transient";
+            case Modifier.VOLATILE:
+                result = "volatile";
+            case Modifier.INTERFACE:
+                result = "interface";
+        }
+        return result;
     }
 }

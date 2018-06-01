@@ -1,19 +1,26 @@
 package family.proxy;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
+
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.Ansi.*;
+import sun.misc.ProxyGenerator;
 
 /**
  * Created by yangboyu on 2018/2/12.
  */
 public class Test4Proxy {
-    public static void main(String[] args) throws NoSuchMethodException, ClassNotFoundException {
+    public static void main(String[] args) throws NoSuchMethodException, ClassNotFoundException, IOException {
 //        Properties properties = System.getProperties();
 //        for (String name : properties.stringPropertyNames()) {
 //            System.out.println(String.format("name:[%s],valie:[%s]", name, properties.getProperty(name)));
 //        }
-
 //        Method hashCodeMethod = Object.class.getMethod("hashCode", new Class[0]);
 //        Method toStringMethod = Object.class.getMethod("toString");
 
@@ -38,12 +45,13 @@ public class Test4Proxy {
 //        System.out.println(System.getProperty("java.ext.dirs"));
 //        System.out.println(System.getProperty("java.class.path"));
 
+        // 相对路径,项目启动路径, 当前地址为:/Users/yangboyu/work/idea/com/sun/proxy
         System.setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
-        ClassLoader classLoader1 = ProxyImp.class.getClassLoader();
-//        ClassLoader classLoader2 = new UserClassLoader();
         InvocationHandler handler = new ProxyInvocationHandler(new ProxyImp());
 
-        IProxy proxy1 = (IProxy) Proxy.newProxyInstance(classLoader1, new Class[]{IProxy.class}, handler);
+        saveGenerateProxyClass("/Users/yangboyu/work/a", new Class[]{IProxy.class}, "family.proxy.Test4Proxy$IProxy");
+        IProxy proxy1 = (IProxy) Proxy.newProxyInstance(Test4Proxy.class.getClassLoader(), new Class[]{IProxy.class}, handler);
+        System.out.println(String.format("%s", proxy1.toString()));
         proxy1.test1();
         proxy1.test1(1, 2);
 
@@ -70,9 +78,12 @@ public class Test4Proxy {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            System.out.println(String.format("%s begin", Thread.currentThread().getStackTrace()[1].getMethodName()));
+
+            System.out.println(Ansi.ansi().eraseScreen().fg(Color.BLUE).a(String.format("%s begin", method.getName())).reset());
+
             Object object = method.invoke(this.imp, args);
-            System.out.println(String.format("%s end", Thread.currentThread().getStackTrace()[1].getMethodName()));
+
+            System.out.println(Ansi.ansi().eraseScreen().fg(Color.BLUE).a(String.format("%s end", method.getName())).reset());
 
             return object;
         }
@@ -95,5 +106,46 @@ public class Test4Proxy {
         public void test1(Integer a, Integer b) {
             System.out.println(String.format("%s-p1(%s),p2(%s)", Thread.currentThread().getStackTrace()[1].getMethodName(), a, b));
         }
+    }
+
+    public static byte[] saveGenerateProxyClass(String path, Class<?>[] interfaces, String proxyName) {
+
+        byte[] classFile = ProxyGenerator.generateProxyClass(proxyName, interfaces);
+
+        FileOutputStream out = null;
+
+        try {
+            String filePath = path + "/" + proxyName.replace('.', '/') + ".class";
+            mkDirectory(filePath.substring(0, filePath.lastIndexOf('/')));
+            out = new FileOutputStream(filePath);
+            out.write(classFile);
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) out.close();
+            } catch (IOException e) {
+                //ignore
+            }
+        }
+        return classFile;
+    }
+
+    public static boolean mkDirectory(String path) {
+        File file = null;
+        try {
+            file = new File(path);
+            if (!file.exists()) {
+                return file.mkdirs();
+            }
+            else{
+                return false;
+            }
+        } catch (Exception e) {
+        } finally {
+            file = null;
+        }
+        return false;
     }
 }

@@ -1,20 +1,29 @@
 package family.proxy;
 
+import sun.misc.Resource;
+import sun.misc.URLClassPath;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by yangboyu on 2018/2/8.
  */
-public class UserClassLoader1 extends ClassLoader {
+public class UserClassLoader1 extends UserDefineBaseClassLoader {
 
     private String mLibPath;
 
     public UserClassLoader1(String path) {
         // TODO Auto-generated constructor stub
         mLibPath = path;
+    }
+
+    @Override
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
+        return super.loadClass(name);
     }
 
     @Override
@@ -27,7 +36,6 @@ public class UserClassLoader1 extends ClassLoader {
 
         try {
             FileInputStream is = new FileInputStream(file);
-
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             int len = 0;
             try {
@@ -55,11 +63,7 @@ public class UserClassLoader1 extends ClassLoader {
     //获取要加载 的class文件名
     private String getFileName(String name) {
         // TODO Auto-generated method stub
-        int index = name.lastIndexOf('.');
-        if (index == -1) {
-            return name + ".class";
-        } else {
-            return name.substring(index + 1) + ".class";
-        }
+        String path = name.replace('.', '/').concat(".class");
+        return path;
     }
 }

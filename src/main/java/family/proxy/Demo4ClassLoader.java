@@ -2,27 +2,28 @@ package family.proxy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 
 /**
  * Created by yangboyu on 2018/2/8.
  */
 public class Demo4ClassLoader {
     public static void main(String[] args){
-        UserClassLoader1 diskLoader1 = new UserClassLoader1("/Users/yangboyu/work/idea/test-pudding-entity/classloader/test1/com/demo");
+        UserClassLoader1 diskLoader1 = new UserClassLoader1("/Users/yangboyu/work/a");
 
-        UserClassLoader2 diskLoader2 = new UserClassLoader2("/Users/yangboyu/work/idea/test-pudding-entity/classloader/test2/com/demo");
+//        UserClassLoader2 diskLoader2 = new UserClassLoader2("/Users/yangboyu/work/idea/test-pudding-entity/classloader/test2/com/demo");
 
         test(diskLoader1);
 
 //        Thread.currentThread().setContextClassLoader(diskLoader2);
 
 
-        test(diskLoader2);
     }
 
     private static void test(ClassLoader diskLoader){
         try {
             //加载class文件
+            Class cc = Class.forName("family.proxy.Test4Proxy$IProxy", false, diskLoader);
             Class c = diskLoader.loadClass("com.demo.Test");
 
             if(c != null){
